@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine Letter</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    transition: background 1.2s ease;
+}
+
+body.dark {
+    background: #0b0b0b;
+}
+
+/* ================= ENVELOPE ================= */
+.envelope-container {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    cursor: pointer;
+    perspective: 1000px;
+    transition: opacity 1s ease, transform 1s ease;
+    z-index: 5;
+}
+
+.envelope-container.hide {
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+}
+
+.envelope {
+    width: 100%;
+    height: 100%;
+    background: #b08968;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.letter {
+    position: absolute;
+    bottom: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85%;
+    height: 160px;
+    background: #fffaf3;
+    border-radius: 6px;
+    padding: 15px;
+    box-sizing: border-box;
+    text-align: center;
+    transition: bottom 1s ease;
+}
+
+.letter p {
+    font-family: 'Great Vibes', cursive;
+    font-size: 28px;
+    color: #7a1f1f;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-around;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+}
+
+.buttons button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.yes {
+    background: #7a1f1f;
+    color: white;
+    box-shadow: 0 0 12px rgba(122,31,31,0.6);
+}
+
+.no {
+    background: #d8cfc4;
+    color: #5a3e2b;
+    position: relative;
+}
+
+/* Envelope flap */
+.flap {
+    position: absolute;
+    inset: 0;
+    background: #9c6b4a;
+    clip-path: polygon(0 0, 100% 0, 50% 50%);
+    transform-origin: top;
+    transition: transform 0.8s ease;
+}
+
+.open .flap {
+    transform: rotateX(180deg);
+}
+
+.open .letter {
+    bottom: 20px;
+}
+
+/* ================= FINAL LETTER ================= */
+.final-letter {
+    position: absolute;
+    width: 800px;
+    max-width: 90%;
+    min-height: 800px;
+    padding: 30px;
+    background: #fffaf3;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 0 40px rgba(255,200,200,0.4);
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all 1.2s ease;
+    z-index: 4;
+}
+
+/* SHOW FINAL LETTER */
+.final-letter.show {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* PHOTO STRIP ON TOP */
+.final-letter .photo-strip {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    left: 0%;
+    position: absolute;       /* add this */
+    top: -120px;               /* distance above the white box */
+    transform: translateX(-50%);  /* center adjustment */
+    opacity: 0;
+    transition: all 0.8s ease-out;
+}
+
+/* SHOW PHOTO STRIP WITH SLIDE DOWN */
+.final-letter.show .photo-strip {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.final-letter .photo-strip img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.final-letter h1 {
+    font-family: 'Arial';
+    font-size: 40px;
+    color: #7a1f1f;
+}
+
+.final-letter p {
+    font-size: 27px;
+    color: #4a2c2c;
+    line-height: 1.6;
+    margin-top: 15px;
+}
+
+/* HEART */
+.heart {
+    font-size: 300px;
+    color: red;
+    text-shadow: 0 0 10px rgba(255,0,0,0.7);
+    animation: beat 1s infinite;
+    
+    position: absolute;      /* position it outside */
+    bottom: -190px;          /* distance below the box, adjust as needed */
+    left: 35%;
+    transform: translateX(-50%);
+}
+
+@keyframes beat {
+    0%,100% { transform: scale(1); }
+    25% { transform: scale(1.1); }
+    50% { transform: scale(1.2); }
+    75% { transform: scale(1.1); }
+}
+
+/* ================= FLOWERS ================= */
+.garden {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 50%;
+    pointer-events: none;
+}
+
+.flower {
+    position: absolute;
+    bottom: 0;
+    animation: grow 3s ease-out forwards;
+}
+
+@keyframes grow {
+    from { transform: scaleY(0); }
+    to { transform: scaleY(1); }
+}
+
+.stem {
+    width: 6px;
+    height: 120px;
+    background: #2b9348;
+    margin: auto;
+}
+
+.bloom {
+    width: 80px;
+    height: 80px;
+    position: relative;
+}
+
+.center {
+    width: 20px;
+    height: 20px;
+    background: gold;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.petal {
+    width: 15px;
+    height: 35px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: 50% 100%;
+}
+
+.petal:nth-child(1){transform:translate(-50%,-100%) rotate(0)}
+.petal:nth-child(2){transform:translate(-50%,-100%) rotate(45deg)}
+.petal:nth-child(3){transform:translate(-50%,-100%) rotate(90deg)}
+.petal:nth-child(4){transform:translate(-50%,-100%) rotate(135deg)}
+.petal:nth-child(5){transform:translate(-50%,-100%) rotate(180deg)}
+.petal:nth-child(6){transform:translate(-50%,-100%) rotate(225deg)}
+.petal:nth-child(7){transform:translate(-50%,-100%) rotate(270deg)}
+.petal:nth-child(8){transform:translate(-50%,-100%) rotate(315deg)}
+
+/* ================= BUTTERFLIES ================= */
+.butterfly {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: mediumpurple;
+    border-radius: 50%;
+    animation: fly 6s linear infinite;
+}
+
+@keyframes fly {
+    to { transform: translate(300px,-300px); }
+}
+
+/* ================= SURPRISE PHOTO ================= */
+#surpriseContainer {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    z-index: 999;
+    pointer-events: none;
+}
+
+.photo-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+#surprisePhoto {
+    max-width: 240px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+#surpriseText {
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Great Vibes', cursive;
+    color: darkred;
+    text-shadow: 0 0 6px rgba(0,0,0,0.8);
+    animation: cryDown 1.6s infinite ease-in-out;
+}
+
+@keyframes cryDown {
+    0% { transform: translateX(-50%) translateY(0); opacity: 1; }
+    50% { transform: translateX(-50%) translateY(10px); opacity: 0.6; }
+    100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ENVELOPE -->
+<div class="envelope-container" id="envelope" onclick="openEnvelope()">
+    <div class="envelope">
+        <div class="letter">
+            <p>Will you be my Valentine?</p>
+            <div class="buttons">
+                <button class="yes" id="yesBtn">Yes</button>
+                <button class="no" id="noBtn">No</button>
+            </div>
+        </div>
+    </div>
+    <div class="flap"></div>
+</div>
+
+<!-- SURPRISE PHOTO -->
+<div id="surpriseContainer">
+    <div class="photo-wrapper">
+        <img id="surprisePhoto" src="/Screenshot_20260210-100904_1.png" alt="Surprise">
+        <div id="surpriseText">Please say yes..</div>
+    </div>
+</div>
+
+<!-- FINAL LETTER -->
+<div class="final-letter" id="finalLetter">
+    <div class="photo-strip">
+        <img src="/Screenshot_20260211-194612_2.png">
+        <img src="/Screenshot_20260212-065932_1.png">
+        <img src="/Screenshot_20251120-113856_1~6_2.png">
+        <img src="/Screenshot_20260211-194122_2.png">
+        <img src="/Screenshot_20251204-115718_1~2_2.png">
+        <img src="/Screenshot_20260211-194131_2.png">
+        <img src="/Screenshot_20260211-200945_1.png">
+        <img src="/Screenshot_20260211-202407_1.png">
+    </div>
+    <h1>HAPPY VALENTINES DAY, MY VALENTINE!</h1>
+    <p>
+‎Thank you for saying yes to being my Valentine, darling. I may not be able to treat you to a fancy date right now, but I’ll make sure it’s all worth it. I know this may not seem like enough, but I want to give you everything I can. <p>I want to make this Valentine’s Day special, especially because it’s our first one together.
+‎I’m so grateful that we’ve come this far, and thank you for giving me a chance and letting me show my feelings for you. I hope we can celebrate many more Valentine’s Days and other special occasions together, whether it’s a special occasion or just an ordinary day. <p>I’m always thankful that you’ve come into my life. Pinangga kaayo tika, Johno. I love you more than words can say.
+‎</p> <p>-Kishea Abaigar</p>
+    <div class="heart">❤</div>
+</div>
+
+<div class="garden" id="garden"></div>
+
+<script>
+function openEnvelope() {
+    document.getElementById("envelope").classList.add("open");
+}
+
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const envelope = document.getElementById("envelope");
+const finalLetter = document.getElementById("finalLetter");
+const garden = document.getElementById("garden");
+const surpriseContainer = document.getElementById("surpriseContainer");
+
+let noClicks = 0;
+
+/* NO BUTTON MOVE + SURPRISE */
+noBtn.addEventListener("click", e => {
+    e.stopPropagation();
+    noClicks++;
+
+    const maxX = envelope.offsetWidth - noBtn.offsetWidth;
+    const maxY = envelope.offsetHeight - noBtn.offsetHeight - 20;
+
+    const randX = Math.random() * maxX;
+    const randY = Math.random() * maxY;
+
+    noBtn.style.position = "absolute";
+    noBtn.style.left = randX + "px";
+    noBtn.style.top = randY + "px";
+
+    if (noClicks === 5) {
+        noBtn.style.display = "none";
+        surpriseContainer.style.display = "block";
+    }
+});
+
+/* YES BUTTON */
+yesBtn.addEventListener("click", e => {
+    e.stopPropagation();
+
+    surpriseContainer.style.display = "none";
+
+    document.body.classList.add("dark");
+    envelope.classList.add("hide");
+
+    setTimeout(() => finalLetter.classList.add("show"), 700);
+
+    // Flowers
+    for (let i = 0; i < 6; i++) {
+        const flower = document.createElement("div");
+        flower.className = "flower";
+        flower.style.left = 10 + i * 15 + "%";
+        flower.innerHTML = `
+            <div class="bloom">
+                <div class="petal"></div><div class="petal"></div>
+                <div class="petal"></div><div class="petal"></div>
+                <div class="petal"></div><div class="petal"></div>
+                <div class="petal"></div><div class="petal"></div>
+                <div class="center"></div>
+            </div>
+            <div class="stem"></div>`;
+        garden.appendChild(flower);
+    }
+
+    // Butterflies
+    for (let i = 0; i < 6; i++) {
+        const b = document.createElement("div");
+        b.className = "butterfly";
+        b.style.left = Math.random() * 100 + "%";
+        b.style.top = Math.random() * 100 + "%";
+        document.body.appendChild(b);
+    }
+});
+</script>
+
+</body>
+</html>
